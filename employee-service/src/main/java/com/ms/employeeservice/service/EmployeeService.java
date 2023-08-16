@@ -5,6 +5,7 @@ import com.ms.employeeservice.model.DTO.DepartmentDTO;
 import com.ms.employeeservice.model.Employee;
 import com.ms.employeeservice.model.DTO.EmployeeDTO;
 import com.ms.employeeservice.repository.EmployeeRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,15 +22,17 @@ public class EmployeeService {
     private APIClient apiClient;
 
 //    private RestTemplate restTemplate;
-//    private WebClient webClient;
+          private WebClient webClient;
 
 
 
 
     public EmployeeService(EmployeeRepository employeeRepository,
-                           APIClient apiClient) {
+                           APIClient apiClient,
+                           WebClient webClient) {
         this.employeeRepository = employeeRepository;
         this.apiClient=apiClient;
+        this.webClient=webClient;
     }
 
     public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO){
@@ -43,6 +46,7 @@ public class EmployeeService {
 
     }
 
+    @CircuitBreaker(name = "${spring.application.name}", fallbackMethod = "getDefaultDepartment")
     public APIResponseDTO getEmployeeById(Long id) {
        Optional<Employee> employee = employeeRepository.findById(id);
 
@@ -51,14 +55,14 @@ public class EmployeeService {
 //                        + employee.get().getDepartmentCode(), DepartmentDTO.class);
 //        DepartmentDTO departmentDTO = responseEntity.getBody();
 
-//      DepartmentDTO departmentDTO=  webClient.get()
-//                .uri("http://localhost:8080/api/departments/getDepartment/"
-//                        + employee.get().getDepartmentCode())
-//                .retrieve()
-//                .bodyToMono(DepartmentDTO.class)
-//                .block();
+      DepartmentDTO departmentDTO=  webClient.get()
+                .uri("http://localhost:8080/api/departments/getDepartment/"
+                        + employee.get().getDepartmentCode())
+                .retrieve()
+                .bodyToMono(DepartmentDTO.class)
+                .block();
 
-        DepartmentDTO departmentDTO = apiClient.getDepartment(employee.get().getDepartmentCode());
+       // DepartmentDTO departmentDTO = apiClient.getDepartment(employee.get().getDepartmentCode());
         EmployeeDTO employeeDTO = new EmployeeDTO();
         BeanUtils.copyProperties(employee.get(),employeeDTO);
         APIResponseDTO apiResponseDTO = new APIResponseDTO();
@@ -66,5 +70,20 @@ public class EmployeeService {
         apiResponseDTO.setDepartmentDTO(departmentDTO);
         return apiResponseDTO;
 
+    }
+    public APIResponseDTO getDefaultDepartment(Long id, Exception exception) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+
+        DepartmentDTO departmentDTO = new DepartmentDTO();
+        departmentDTO.setDepartmentCode("DP001");
+        departmentDTO.setDepartmentName("Departmennt");
+        departmentDTO.setDepartmentDescription("Departmant creator");
+
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        BeanUtils.copyProperties(employee.get(),employeeDTO);
+        APIResponseDTO apiResponseDTO = new APIResponseDTO();
+        apiResponseDTO.setEmployeeDTO(employeeDTO);
+        apiResponseDTO.setDepartmentDTO(departmentDTO);
+        return apiResponseDTO;
     }
 }
