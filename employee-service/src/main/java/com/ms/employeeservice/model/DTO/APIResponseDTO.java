@@ -1,12 +1,16 @@
 package com.ms.employeeservice.model.DTO;
 
+import com.ms.organizationservice.entity.DTO.OrganizationDTO;
+
 public class APIResponseDTO {
     private EmployeeDTO employeeDTO;
     private DepartmentDTO departmentDTO;
+    private OrganizationDTO organizationDTO;
 
-    public APIResponseDTO(EmployeeDTO employeeDTO, DepartmentDTO departmentDTO) {
+    public APIResponseDTO(EmployeeDTO employeeDTO, DepartmentDTO departmentDTO, OrganizationDTO organizationDTO) {
         this.employeeDTO = employeeDTO;
         this.departmentDTO = departmentDTO;
+        this.organizationDTO=organizationDTO;
     }
 
 
@@ -28,5 +32,13 @@ public class APIResponseDTO {
 
     public void setDepartmentDTO(DepartmentDTO departmentDTO) {
         this.departmentDTO = departmentDTO;
+    }
+
+    public OrganizationDTO getOrganizationDTO() {
+        return organizationDTO;
+    }
+
+    public void setOrganizationDTO(OrganizationDTO organizationDTO) {
+        this.organizationDTO = organizationDTO;
     }
 }

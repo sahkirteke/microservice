@@ -5,6 +5,7 @@ import com.ms.employeeservice.model.DTO.DepartmentDTO;
 import com.ms.employeeservice.model.DTO.EmployeeDTO;
 import com.ms.employeeservice.model.Employee;
 import com.ms.employeeservice.repository.EmployeeRepository;
+import com.ms.organizationservice.entity.DTO.OrganizationDTO;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,11 +62,15 @@ public class EmployeeService {
 //        DepartmentDTO departmentDTO = responseEntity.getBody();
 
       DepartmentDTO departmentDTO=  webClient.get()
-                .uri("http://localhost:8080/api/departments/getDepartment/"
+                .uri("http://localhost:8080/api/departments/"
                         + employee.get().getDepartmentCode())
                 .retrieve()
                 .bodyToMono(DepartmentDTO.class)
                 .block();
+
+        OrganizationDTO  organizationDTO= webClient.get().
+                uri("http://localhost:8083/api/organizations/" + employee.get().getOrganizationCode()).retrieve()
+                .bodyToMono(OrganizationDTO.class).block();
 
        // DepartmentDTO departmentDTO = apiClient.getDepartment(employee.get().getDepartmentCode());
         EmployeeDTO employeeDTO = new EmployeeDTO();
@@ -73,6 +78,7 @@ public class EmployeeService {
         APIResponseDTO apiResponseDTO = new APIResponseDTO();
         apiResponseDTO.setEmployeeDTO(employeeDTO);
         apiResponseDTO.setDepartmentDTO(departmentDTO);
+        apiResponseDTO.setOrganizationDTO(organizationDTO);
         return apiResponseDTO;
 
     }
