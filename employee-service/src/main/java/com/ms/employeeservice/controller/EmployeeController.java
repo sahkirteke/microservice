@@ -24,7 +24,7 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeDTOSaved, HttpStatus.CREATED);
     }
 
-    @GetMapping("/getEmployeeById/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<APIResponseDTO> getEmployeeById(@PathVariable("id") Long id){
         APIResponseDTO apiResponseDTO = employeeService.getEmployeeById(id);
         return new ResponseEntity(apiResponseDTO,HttpStatus.OK);
