@@ -2,20 +2,22 @@ package com.ms.employeeservice.service;
 
 import com.ms.employeeservice.model.DTO.APIResponseDTO;
 import com.ms.employeeservice.model.DTO.DepartmentDTO;
-import com.ms.employeeservice.model.Employee;
 import com.ms.employeeservice.model.DTO.EmployeeDTO;
+import com.ms.employeeservice.model.Employee;
 import com.ms.employeeservice.repository.EmployeeRepository;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Optional;
 
 @Service
 public class EmployeeService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeService.class);
 
     private EmployeeRepository employeeRepository;
 
@@ -46,8 +48,11 @@ public class EmployeeService {
 
     }
 
-    @CircuitBreaker(name = "${spring.application.name}", fallbackMethod = "getDefaultDepartment")
+   // @CircuitBreaker(name = "${spring.application.name}", fallbackMethod = "getDefaultDepartment")
+    @Retry(name = "${spring.application.name}",fallbackMethod ="getDefaultDepartment")
     public APIResponseDTO getEmployeeById(Long id) {
+
+        LOGGER.info("inside GetEmploye method");
        Optional<Employee> employee = employeeRepository.findById(id);
 
 //       ResponseEntity<DepartmentDTO> responseEntity =
@@ -72,6 +77,7 @@ public class EmployeeService {
 
     }
     public APIResponseDTO getDefaultDepartment(Long id, Exception exception) {
+        LOGGER.info("inside getDefaultDepartment  method");
         Optional<Employee> employee = employeeRepository.findById(id);
 
         DepartmentDTO departmentDTO = new DepartmentDTO();
