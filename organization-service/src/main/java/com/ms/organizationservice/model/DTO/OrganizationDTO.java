@@ -1,26 +1,36 @@
-package com.ms.organizationservice.entity;
+package com.ms.organizationservice.model.DTO;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "organizations")
-public class Organization {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Schema(
+        description = "OrganizationDTO Model Information"
+)
+public class OrganizationDTO {
     private Long id;
-    @Column(nullable = false)
+
+    @Schema(
+            description = "Organization Name"
+    )
     private String organizationName;
+
+    @Schema(
+            description = "Organization Description"
+    )
     private String organizationDescription;
-    @Column(nullable = false, unique = true)
+
+    @Schema(
+            description = "Organization Code"
+    )
     private String organizationCode;
-    @CreationTimestamp
+
+    @Schema(
+            description = "Organization Created Date"
+    )
     private LocalDateTime createdDate;
 
-    public Organization(Long id, String organizationName, String organizationDescription, String organizationCode, LocalDateTime createdDate) {
+    public OrganizationDTO(Long id, String organizationName, String organizationDescription, String organizationCode, LocalDateTime createdDate) {
         this.id = id;
         this.organizationName = organizationName;
         this.organizationDescription = organizationDescription;
@@ -28,8 +38,7 @@ public class Organization {
         this.createdDate = createdDate;
     }
 
-    public Organization() {
-
+    public OrganizationDTO() {
     }
 
     public Long getId() {
