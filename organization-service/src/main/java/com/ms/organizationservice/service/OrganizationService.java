@@ -1,8 +1,8 @@
 package com.ms.organizationservice.service;
 
 
-import com.ms.organizationservice.entity.DTO.OrganizationDTO;
-import com.ms.organizationservice.entity.Organization;
+import com.ms.organizationservice.model.DTO.OrganizationDTO;
+import com.ms.organizationservice.model.Organization;
 import com.ms.organizationservice.repository.OrganizationRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

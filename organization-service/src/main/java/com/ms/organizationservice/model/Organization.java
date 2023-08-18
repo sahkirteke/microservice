@@ -1,15 +1,26 @@
-package com.ms.organizationservice.entity.DTO;
+package com.ms.organizationservice.model;
+
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-public class OrganizationDTO {
+@Entity
+@Table(name = "organizations")
+public class Organization {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String organizationName;
     private String organizationDescription;
+    @Column(nullable = false, unique = true)
     private String organizationCode;
+    @CreationTimestamp
     private LocalDateTime createdDate;
 
-    public OrganizationDTO(Long id, String organizationName, String organizationDescription, String organizationCode, LocalDateTime createdDate) {
+    public Organization(Long id, String organizationName, String organizationDescription, String organizationCode, LocalDateTime createdDate) {
         this.id = id;
         this.organizationName = organizationName;
         this.organizationDescription = organizationDescription;
@@ -17,7 +28,8 @@ public class OrganizationDTO {
         this.createdDate = createdDate;
     }
 
-    public OrganizationDTO() {
+    public Organization() {
+
     }
 
     public Long getId() {

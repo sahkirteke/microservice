@@ -1,6 +1,6 @@
 package com.ms.employeeservice.model.DTO;
 
-import com.ms.organizationservice.entity.DTO.OrganizationDTO;
+import com.ms.organizationservice.model.DTO.OrganizationDTO;
 
 public class APIResponseDTO {
     private EmployeeDTO employeeDTO;

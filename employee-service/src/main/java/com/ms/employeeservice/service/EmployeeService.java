@@ -5,7 +5,7 @@ import com.ms.employeeservice.model.DTO.DepartmentDTO;
 import com.ms.employeeservice.model.DTO.EmployeeDTO;
 import com.ms.employeeservice.model.Employee;
 import com.ms.employeeservice.repository.EmployeeRepository;
-import com.ms.organizationservice.entity.DTO.OrganizationDTO;
+import com.ms.organizationservice.model.DTO.OrganizationDTO;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
